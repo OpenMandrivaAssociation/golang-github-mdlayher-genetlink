@@ -1,0 +1,34 @@
+From d10d9b14adc693232a71085d1ba5954cd818fe72 Mon Sep 17 00:00:00 2001
+From: Paul Gier <pgier@redhat.com>
+Date: Tue, 15 May 2018 15:01:29 -0500
+Subject: [PATCH] skip arch dependent test on s390x
+
+---
+ family_linux_test.go | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/family_linux_test.go b/family_linux_test.go
+index 71a392c..d6e38c5 100644
+--- a/family_linux_test.go
++++ b/family_linux_test.go
+@@ -3,6 +3,7 @@
+ package genetlink_test
+ 
+ import (
++	"runtime"
+ 	"testing"
+ 
+ 	"github.com/google/go-cmp/cmp"
+@@ -172,6 +173,9 @@ func TestConnFamilyList(t *testing.T) {
+ }
+ 
+ func TestFamily_parseAttributes(t *testing.T) {
++	if runtime.GOARCH == "s390x" {
++		t.Skip("genetlink family not supported on s390x")
++	}
+ 	tests := []struct {
+ 		name  string
+ 		attrs []netlink.Attribute
+-- 
+2.14.3
+
